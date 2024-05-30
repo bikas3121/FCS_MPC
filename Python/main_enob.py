@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """  Run DAC simulation using various noise shaping techniques
 
-@author: Bikash Adhikari 
+@author: Bikash Adhikari  and Arnfinn A. Eielsen
 @date: 23.02.2024
 @license: BSD 3-Clause
 """
@@ -130,12 +130,13 @@ match QMODEL:
 # %% MPC : Prediction horizon
 N = 2
 
-#%% Numerical MPC: Solving MHOQ numerically using Gurobi MILP formulation
-
+#% Numerical MPC: Solving MHOQ numerically using Gurobi MILP formulation
 MHOQ = MHOQ(Nb, Qstep, QMODEL, A, B, C, D)
+
 # Get Codes
 C_MHOQ = MHOQ.get_codes(N, Xcs, YQns, MLns)
 
+# Select DAC model
 match QMODEL:
     case 1:
         Xcs_MHOQ = generate_dac_output(C_MHOQ, YQns)
@@ -148,20 +149,20 @@ tm = t[:Xcs_MHOQ.size]
 TRANSOFF = np.floor(Npt*Fs/Xcs_FREQ).astype(int)  # remove transient effects from output
 sp = SP(Xcs, b, a, TRANSOFF)
 
-# Filterted reference
+# Filter signal
 F_Xcs = sp.referenceFilter
-# Direct quantisation 
-F_Xcs_DIR, err_DIR, var_DIR = sp.signalFilter(Xcs_DIR)
-# MHOQ
-F_Xcs_MHOQ, err_MHOQ, var_MHOQ = sp.signalFilter(Xcs_MHOQ)
+F_Xcs_DIR, err_DIR, var_DIR = sp.signalFilter(Xcs_DIR)  # Direct quantisation 
+F_Xcs_MHOQ, err_MHOQ, var_MHOQ = sp.signalFilter(Xcs_MHOQ) # MHOQ
 
 fig, ax = plt.subplots()
 ax.plot(t[TRANSOFF: TRANSOFF + len(F_Xcs_DIR)], F_Xcs_DIR.squeeze())
 ax.plot(t[TRANSOFF: TRANSOFF + len(F_Xcs_MHOQ)], F_Xcs_MHOQ.squeeze())
 
-plot_variance(var_dir = var_DIR,  var_mhoq = var_MHOQ)
 
 # %% Variance Pots
+plot_variance(var_dir = var_DIR,  var_mhoq = var_MHOQ)
+
+# Performs the curve fitting and calculates the ENO
 yd = Xcs_DIR[0,:len(tm)].squeeze()
 ym = Xcs_MHOQ.squeeze()
 
