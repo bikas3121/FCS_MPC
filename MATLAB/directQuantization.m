@@ -1,4 +1,5 @@
 function [u_direct]= directQuantization(Q, ref)
+% Performs direct quantisation (nearest neighbor quantisation)
     u_direct = zeros(length(ref),1);
     for i = 1:length(ref)
      err_i = zeros(length(Q),1);

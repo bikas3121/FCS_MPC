@@ -1,4 +1,5 @@
-% MPC Setup in YALMIP
+% MPC Setup in YALMIP 
+% can choose between different solvers: Gurobi/ Mosek
 yalmip('clear')
 close all
 clear

@@ -1,4 +1,5 @@
 function [deviation_in_lsb] =  readINL(filename, nob)
+% Reads INL from the measuredINL file
 INL = readmatrix(filename);
 % Scaling according to nob
 dac_levels = INL(:,1);
