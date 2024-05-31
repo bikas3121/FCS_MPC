@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
+""" Save data into file based on the signal type; DAC bits; and carrier, sampling
+    and cutoff frequency of the filter
+
 Created on Tue Dec  5 14:38:25 2023
 @author: bikashadhikari
 """
@@ -12,8 +14,7 @@ import csv
 class writeCustomFilename:   
     def __init__(self, Sig_type, headerlist, datalist):
 
-        """  Save data into file based on the signal type; DAC bits; and carrier, sampling
-        and cutoff frequency of the filter
+        """ Parameters
         :param sig_type:  filtered/unfiltered signal signal 
         :param headerlist: File header
         :param datalist: Data to be stored
@@ -24,16 +25,14 @@ class writeCustomFilename:
 
 
     def writeCfile(self, **kwargs):
+
+        """ Required
+            :nob    - number of bits
+            :fs     - carrier frequency
+            :Fc     - cutoff frequency (reconstruction filter)
+            :Fs     -  sampling frequency 
+        """
         
-        # INPUT: 
-            # Sig_type :  Type of signal to be written; Filetered or Unfiltered
-            # nob: number of bits, 
-            # fs : signal frequency
-            # Fc : cutoff frequency
-            # Fs : Sampling frequency 
-            
-        # OUPUT:
-            # write the file 
         current_datetime = datetime.now().strftime("%y%h%d_%H-%M")
         folder_name = str(self.Sig_type)
         kv_dict = kwargs
@@ -44,6 +43,7 @@ class writeCustomFilename:
         if all(x in key_name for x in req_label) == False:
             # print('Not enough parameters to generate a filename')
             raise KeyError("Not enough parameters to generate a filename")
+
         nob = kv_dict.get('nob')
         fs = kv_dict.get('fs')
         Fc = kv_dict.get('Fc')

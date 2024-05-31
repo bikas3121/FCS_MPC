@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" MPC based linearization method for digital to analog converter (DAC)
+""" Moving horizon implementation of the quantisation 
 
 @author: Bikash Adhikari
 @date: 22.02.2024
@@ -17,14 +17,13 @@ import tqdm
 
 
 class MHOQ:
+
     def __init__(self, Nb, Qstep, QMODEL,  A, B, C, D):
         """
         Constructor for the Model Predictive Controller.
         :param Nb: Number of bits 
         :param Qstep: Quantizer step size / Least significant bit (LSB) 
-        :param N_PRED: Prediction horizon | int 
-        :param Xcs: Reference/Test signal 
-        :param QL: Quantization levels 
+        :param QMODEL: Quantiser model, Ideal or Measured 
         :param A, B, C, D: Matrices; state space representation of the reconstruction filter
         """
         self.Nb = Nb
@@ -37,16 +36,28 @@ class MHOQ:
     
         
     def state_prediction(self, st, con):
-        """
-        Predict the state for the given initial condition and control
+        """Predict the state for the given initial condition and control
+        INPUT
+            :state
+            :control
+        OUTPUT
+            :predicted state
         """
         x_iplus1 = self.A @ st + self.B * con
         return x_iplus1
 
-    
-    
-    # def get_codes(self, Xcs, N_PRED, YQns, MLns)
+     
     def get_codes(self, N_PRED, Xcs, YQns, MLns ):
+        """ Performs the moving horizon implementation and returns DAC codes (non-negative integers) [Optimization problem with integer variables]
+        INPUT
+            :N_PRED - prediction horizon
+            :Xcs    -  reference/carrier signal
+            :YQns   - Ideal levels
+            :MLns   - Measured levels
+        OUTPUT
+            :codes
+        """
+
         match self.QMODEL:
             case 1:
                 QLS = YQns
@@ -142,6 +153,7 @@ class MHOQ:
 
 class MPC_BIN:
     def __init__(self, Nb, Qstep, QMODEL,  A, B, C, D):
+
         """
         Constructor for the Model Predictive Controller.
         :param Nb: Number of bits 
@@ -173,7 +185,15 @@ class MPC_BIN:
     
     # def get_codes(self, Xcs, N_PRED, YQns, MLns)
     def get_codes(self, N_PRED, Xcs, YQns, MLns ):
-
+        """ Performs the moving horizon implementation and returns DAC codes (non-negative integers) [Optimization problem with binary variables]
+        INPUT
+            :N_PRED - prediction horizon
+            :Xcs    -  reference/carrier signal
+            :YQns   - Ideal levels
+            :MLns   - Measured levels
+        OUTPUT
+            :codes
+        """
 
         match self.QMODEL:
             case 1:

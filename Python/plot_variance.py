@@ -15,13 +15,14 @@ import matplotlib.pyplot as plt
 
 
 def plot_variance(**kwargs):
-    # Plots the bar plots for the given values 
+    """Plots the bar plots for the given values 
+        : key, value 
+    """
     x = []
     y = []
     for key, value in kwargs.items() :
         x.append(key)
         y.append(value)
-
 
     fig, ax = plt.subplots()
     x_pos = np.arange(0, len(x),1) 

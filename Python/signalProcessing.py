@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
+""" Filter signal and calcualtes the error variance with respect to the reference siganl
 Created on Tue Aug 29 14:35:58 2023
 @author: bikashadhikari
 """
