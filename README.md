@@ -13,7 +13,7 @@ In this repository you find an implementation of the moving horizon optimal quan
 
 The MHOQ is based on the Linear Time-Invariant modelling of the Digital-to-Analog Converter (DAC). The problem of finding the optimal quantiser levels is formulated into the error minimization problem where the filtered quantised value tracks reference signal. The MPC formulation translates to well-know Finite Constraint Set MPC.
 
-The algorithm is implemented in both matlab and python. We have mainly used [Gurobi](https://www.gurobi.com/) as the solver in the python. But in the MATLAB, we have used YALMIP modelling tool and we also provide the option to choose between the solvers. 
+The algorithm is implemented in both matlab and python. We have mainly used [Gurobi](https://www.gurobi.com/) as the solver in the python. But in the MATLAB, we have used [YALMIP](https://yalmip.github.io/) modelling tool and we also provide the option to choose between the solvers. 
 
 The implementation is based on a small set of libraries mentioned as follows
 ```
